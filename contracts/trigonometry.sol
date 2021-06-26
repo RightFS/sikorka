@@ -73,7 +73,7 @@ library Trigonometry {
      *               angle units, instead of the standard 360 degrees.
      * @return The sine result as a number in the range -32767 to 32767.
      */
-    function sin(uint256 _angle) public pure returns (int) {
+    function sin(uint256 _angle) public pure returns (uint256) {
         uint interp = bits(_angle, INTERP_WIDTH, INTERP_OFFSET);
         uint index = bits(_angle, INDEX_WIDTH, INDEX_OFFSET);
 
@@ -88,11 +88,11 @@ library Trigonometry {
         uint x2 = sin_table_lookup(index + 1);
         uint approximation = ((x2 - x1) * interp) / (2 ** INTERP_WIDTH);
 
-        int sine;
+        uint256 sine;
         if (is_odd_quadrant) {
-            sine = int(x1) + int(approximation);
+            sine = uint256(x1) + uint256(approximation);
         } else {
-            sine = int(x2) - int(approximation);
+            sine = uint256(x2) - uint256(approximation);
         }
 
         if (is_negative_quadrant) {
@@ -107,7 +107,7 @@ library Trigonometry {
      * It functions just like the sin() method but uses the trigonometric
      * identity sin(x + pi/2) = cos(x) to quickly calculate the cos.
      */
-    function cos(uint256 _angle) public pure returns (int) {
+    function cos(uint256 _angle) public pure returns (uint256) {
         if (_angle > ANGLES_IN_CYCLE - QUADRANT_LOW_MASK) {
             _angle = QUADRANT_LOW_MASK - ANGLES_IN_CYCLE - _angle;
         } else {
